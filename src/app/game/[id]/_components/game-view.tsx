@@ -88,105 +88,105 @@ export function GameView({ gameId, organizationId }: GameViewProps) {
   const [currentMonthEvents, setCurrentMonthEvents] = useState<typeof history.events>([]);
   const [currentProgress, setCurrentProgress] = useState(0);
   const [currentDate, setCurrentDate] = useState('');
-  const [secondsLeft, setSecondsLeft] = useState(90);
+  const [secondsLeft, setSecondsLeft] = useState(30);
 
-  useEffect(() => {
-    console.log('Timer useEffect running, dependencies:', { organization: !!organization, gameId });
+  // useEffect(() => {
+  //   console.log('Timer useEffect running, dependencies:', { organization: !!organization, gameId });
 
-    if (!organization || organization.gameState !== 'in_progress') {
-      console.log('Timer useEffect early return - no organization or not in progress');
-      return;
-    }
+  //   if (!organization || organization.gameState !== 'in_progress') {
+  //     console.log('Timer useEffect early return - no organization or not in progress');
+  //     return;
+  //   }
 
-    // Calculate initial game time based on elapsed time since organization creation
-    const now = new Date();
-    const gameStartTime = new Date(organization.createdAt);
-    const elapsedSeconds = Math.floor((now.getTime() - gameStartTime.getTime()) / 1000);
-    const currentMonth = Math.floor(elapsedSeconds / 90);
+  //   // Calculate initial game time based on elapsed time since organization creation
+  //   const now = new Date();
+  //   const gameStartTime = new Date(organization.createdAt);
+  //   const elapsedSeconds = Math.floor((now.getTime() - gameStartTime.getTime()) / 1000);
+  //   const currentMonth = Math.floor(elapsedSeconds / 30);
 
-    // Sync the store time with organization creation date plus elapsed months
-    const targetDate = new Date(organization.createdAt);
-    targetDate.setMonth(targetDate.getMonth() + currentMonth);
-    useGameStore.getState().syncTimeWithOrganization(targetDate);
+  //   // Sync the store time with organization creation date plus elapsed months
+  //   const targetDate = new Date(organization.createdAt);
+  //   targetDate.setMonth(targetDate.getMonth() + currentMonth);
+  //   useGameStore.getState().syncTimeWithOrganization(targetDate);
 
-    console.log('Setting up timer interval');
-    const interval = setInterval(() => {
-      console.log('Timer tick');
-      const now = new Date();
-      const gameStartTime = new Date(organization.createdAt);
-      const elapsedSeconds = Math.floor((now.getTime() - gameStartTime.getTime()) / 1000);
+  //   console.log('Setting up timer interval');
+  //   const interval = setInterval(() => {
+  //     console.log('Timer tick');
+  //     const now = new Date();
+  //     const gameStartTime = new Date(organization.createdAt);
+  //     const elapsedSeconds = Math.floor((now.getTime() - gameStartTime.getTime()) / 1000);
 
-      // Calculate current month (90 seconds per month)
-      const currentMonth = Math.floor(elapsedSeconds / 90);
-      const secondsInCurrentMonth = elapsedSeconds % 90;
-      const progress = (secondsInCurrentMonth / 90) * 100;
+  //     // Calculate current month (30 seconds per month)
+  //     const currentMonth = Math.floor(elapsedSeconds / 30);
+  //     const secondsInCurrentMonth = elapsedSeconds % 30;
+  //     const progress = (secondsInCurrentMonth / 30) * 100;
 
-      // Calculate date based on elapsed months
-      const startDate = new Date(organization.createdAt);
-      const currentDate = new Date(startDate);
-      currentDate.setMonth(startDate.getMonth() + currentMonth);
+  //     // Calculate date based on elapsed months
+  //     const startDate = new Date(organization.createdAt);
+  //     const currentDate = new Date(startDate);
+  //     currentDate.setMonth(startDate.getMonth() + currentMonth);
 
-      // Update state
-      setCurrentProgress(progress);
-      setCurrentDate(`${MONTHS[currentDate.getMonth()]} ${currentDate.getFullYear()}`);
-      setSecondsLeft(90 - secondsInCurrentMonth);
+  //     // // Update state
+  //     setCurrentProgress(progress);
+  //     setCurrentDate(`${MONTHS[currentDate.getMonth()]} ${currentDate.getFullYear()}`);
+  //     setSecondsLeft(30 - secondsInCurrentMonth);
 
-      // Handle month transition
-      if (secondsInCurrentMonth === 0 && elapsedSeconds > 0) {
-        useGameStore.getState().advanceMonth();
+  //     // Handle month transition
+  //     if (secondsInCurrentMonth === 0 && elapsedSeconds > 0) {
+  //       useGameStore.getState().advanceMonth();
 
-        // Get the updated game state after advanceMonth() has run
-        const updatedGameState = useGameStore.getState();
+  //       // Get the updated game state after advanceMonth() has run
+  //       const updatedGameState = useGameStore.getState();
 
-        // Get the current game time for filtering events (use the OLD time for filtering since we want events from the month that just ended)
-        const currentGameTime = time.year * 10000 + time.month * 100;
-        const nextGameTime = time.year * 10000 + (time.month + 1) * 100;
+  //       // Get the current game time for filtering events (use the OLD time for filtering since we want events from the month that just ended)
+  //       const currentGameTime = time.year * 10000 + time.month * 100;
+  //       const nextGameTime = time.year * 10000 + (time.month + 1) * 100;
 
-        console.log(currentGameTime, nextGameTime, updatedGameState.history.events);
+  //       console.log(currentGameTime, nextGameTime, updatedGameState.history.events);
 
-        // Filter events for the current month using the updated history
-        const monthEvents = updatedGameState.history.events.filter(
-          (event) => event.timestamp >= currentGameTime && event.timestamp < nextGameTime
-        );
+  //       // Filter events for the current month using the updated history
+  //       const monthEvents = updatedGameState.history.events.filter(
+  //         (event) => event.timestamp >= currentGameTime && event.timestamp < nextGameTime
+  //       );
 
-        // Sync game data when month ends
-        const gameData = useGameStore.getState();
-        saveGameData.mutate({
-          id: gameId,
-          gameData: {
-            player: gameData.player,
-            jobs: gameData.jobs,
-            assets: gameData.assets,
-            goods: gameData.goods,
-            history: gameData.history,
-            time: gameData.time,
-            investments: gameData.investments,
-          },
-        });
+  //       // Sync game data when month ends
+  //       const gameData = useGameStore.getState();
+  //       saveGameData.mutate({
+  //         id: gameId,
+  //         gameData: {
+  //           player: gameData.player,
+  //           jobs: gameData.jobs,
+  //           assets: gameData.assets,
+  //           goods: gameData.goods,
+  //           history: gameData.history,
+  //           time: gameData.time,
+  //           investments: gameData.investments,
+  //         },
+  //       });
 
-        setCurrentMonthEvents(monthEvents);
-        setIsMonthSummaryOpen(true);
-      }
-    }, 1000);
+  //       setCurrentMonthEvents(monthEvents);
+  //       setIsMonthSummaryOpen(true);
+  //     }
+  //   }, 1000);
 
-    return () => {
-      console.log('Timer useEffect cleanup - clearing interval');
-      clearInterval(interval);
-    };
-  }, [organization, gameId]);
+  //   return () => {
+  //     console.log('Timer useEffect cleanup - clearing interval');
+  //     clearInterval(interval);
+  //   };
+  // }, [organization, gameId]);
 
   // Auto-close month summary dialog after 30 seconds
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (isMonthSummaryOpen) {
-      timeout = setTimeout(() => {
-        setIsMonthSummaryOpen(false);
-      }, 30000);
-    }
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [isMonthSummaryOpen]);
+  // useEffect(() => {
+  //   let timeout: NodeJS.Timeout;
+  //   if (isMonthSummaryOpen) {
+  //     timeout = setTimeout(() => {
+  //       setIsMonthSummaryOpen(false);
+  //     }, 30000);
+  //   }
+  //   return () => {
+  //     if (timeout) clearTimeout(timeout);
+  //   };
+  // }, [isMonthSummaryOpen]);
 
   if (!game || !organization) return null;
 
@@ -195,8 +195,8 @@ export function GameView({ gameId, organizationId }: GameViewProps) {
       <GameHeader
         userName={session?.user?.name ?? 'Player'}
         currentDate={currentDate}
-        progress={currentProgress}
-        secondsLeft={secondsLeft}
+        // progress={currentProgress}
+        // secondsLeft={secondsLeft}
       />
 
       <div className="flex-1 w-full overflow-y-auto p-8 inset-shadow-sm rounded-4xl bg-white border">

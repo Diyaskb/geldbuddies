@@ -29,7 +29,7 @@ interface TurnTimerProps {
 export function TurnTimer({ gameState, createdAt }: TurnTimerProps) {
   const [currentProgress, setCurrentProgress] = useState(0);
   const [currentDate, setCurrentDate] = useState('');
-  const [secondsLeft, setSecondsLeft] = useState(90);
+  const [secondsLeft, setSecondsLeft] = useState(30);
 
   useEffect(() => {
     if (gameState !== 'in_progress') {
@@ -41,10 +41,10 @@ export function TurnTimer({ gameState, createdAt }: TurnTimerProps) {
       const gameStartTime = new Date(createdAt);
       const elapsedSeconds = Math.floor((now.getTime() - gameStartTime.getTime()) / 1000);
 
-      // Calculate current month (90 seconds per month)
-      const currentMonth = Math.floor(elapsedSeconds / 90);
-      const secondsInCurrentMonth = elapsedSeconds % 90;
-      const progress = (secondsInCurrentMonth / 90) * 100;
+      // Calculate current month (30 seconds per month)
+      const currentMonth = Math.floor(elapsedSeconds / 30);
+      const secondsInCurrentMonth = elapsedSeconds % 30;
+      const progress = (secondsInCurrentMonth / 30) * 100;
 
       // Calculate date based on elapsed months
       const startDate = new Date(createdAt);
@@ -54,7 +54,7 @@ export function TurnTimer({ gameState, createdAt }: TurnTimerProps) {
       // Update state
       setCurrentProgress(progress);
       setCurrentDate(`${MONTHS[currentDate.getMonth()]} ${currentDate.getFullYear()}`);
-      setSecondsLeft(90 - secondsInCurrentMonth);
+      setSecondsLeft(30 - secondsInCurrentMonth);
     }, 1000);
 
     return () => clearInterval(interval);
