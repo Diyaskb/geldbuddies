@@ -1,0 +1,18 @@
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        - DATABASE_URL=postgresql://neondb_owner:npg_iwtc3azT9QRo@ep-rough-sea-a2n7v3te-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require
+        - AUTH_SECRET=ietsSterksEnRandoms123
+    ports:
+      - "3000:3000"
+
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - AUTH_SECRET=${AUTH_SECRET}
