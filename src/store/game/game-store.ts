@@ -54,9 +54,11 @@ const resetGame = (set: (state: Partial<GameStore>) => void) => ({
         events: [],
       },
       time: {
+        day: 1,
         month: 1,
         year: 2025,
-        monthName: 'Januari',
+        dayName: 'Maandag',
+        monthName: 'Januari'
       },
       investments: {
         stocks: initialStocks.map((stock: Stock) => ({

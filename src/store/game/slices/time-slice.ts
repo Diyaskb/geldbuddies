@@ -15,11 +15,24 @@ const MONTHS = [
   'December',
 ];
 
+const DAYS = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+
+]
+
 export const createTimeSlice: GameSlice<TimeSlice> = (set, get) => ({
   time: {
+    day: 1,
     month: 1,
     year: 2025,
-    monthName: MONTHS[0],
+    dayName: DAYS[0],
+    monthName: 'Januari'
   },
 
   advanceMonth: () => {
@@ -37,28 +50,22 @@ export const createTimeSlice: GameSlice<TimeSlice> = (set, get) => ({
 
     // Update time
     set((state) => {
-      if (state.time.month === 12) {
-        state.time.month = 1;
-        state.time.year++;
-      } else {
-        state.time.month++;
-      }
-      state.time.monthName = MONTHS[state.time.month - 1];
-    });
+        state.time.day++;
+      });
 
     // Add to history
     get().addHistoryEvent({
       type: 'life',
-      description: `Nieuwe maand: ${get().time.monthName} ${get().time.year}`,
+      description: `Nieuwe dag: ${get().time.day}`,
     });
   },
 
   // Updated function to sync time with organization creation date
   syncTimeWithOrganization: (targetDate: Date) => {
     set((state) => {
-      state.time.month = targetDate.getMonth() + 1;
+      state.time.day = targetDate.getDay() + 1;
       state.time.year = targetDate.getFullYear();
-      state.time.monthName = MONTHS[state.time.month - 1];
+      state.time.dayName = DAYS[state.time.day - 1];
     });
 
     // Update stock prices to reflect the new time

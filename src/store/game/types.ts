@@ -110,8 +110,10 @@ export interface HistorySlice {
 // Time slice types
 export interface TimeSlice {
   time: {
+    day: number;
     month: number;
     year: number;
+    dayName: string;
     monthName: string;
   };
   advanceMonth: () => void;
