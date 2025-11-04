@@ -87,7 +87,6 @@ export default function SidebarRight() {
           {history.events.length > 0 ? (
             Object.entries(groupedEvents).map(([monthYear, events]) => (
               <SidebarGroup key={monthYear}>
-                <SidebarGroupLabel>{monthYear}</SidebarGroupLabel>
                 <SidebarGroupContent className="space-y-2">
                   {events.map((event) => (
                     <Card key={event.id} className="p-3 gap-1">
