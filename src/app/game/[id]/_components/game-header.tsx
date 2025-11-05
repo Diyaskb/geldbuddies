@@ -36,15 +36,24 @@ export function GameHeader({ userName, currentDate }: GameHeaderProps) {
           </Badge>
         </div>
 
-        {/* Right side: open modal instead of direct advance */}
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          variant="outline"
-          className="flex items-center gap-2 text-blue-600 border-blue-400 hover:bg-blue-50 transition-colors rounded-full px-4 py-2"
-        >
-          <Calendar className="size-5 text-blue-500" />
-          <span className="font-medium">Einde dag: {time.day}</span>
-        </Button>
+        {/* Right side: two buttons side by side */}
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            className="flex items-center gap-2 text-blue-600 border-blue-400 hover:bg-blue-50 transition-colors rounded-full px-4 py-2"
+          >
+            <Calendar className="size-5 text-blue-500" />
+            <span className="font-medium">Dag: {time.day}</span>
+          </Button>
+
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            variant="outline"
+            className="flex items-center gap-2 text-red-600 border-red-400 hover:bg-red-50 transition-colors rounded-full px-4 py-2"
+          >
+            <span className="font-medium">Einde dag</span>
+          </Button>
+        </div>
 
         {/* End-of-day confirmation modal */}
         <EndDayModal
