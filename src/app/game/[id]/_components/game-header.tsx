@@ -36,7 +36,7 @@ export function GameHeader({ userName, currentDate }: GameHeaderProps) {
           </Badge>
         </div>
 
-        {/* Right side: two buttons side by side */}
+        {/* Right side: two buttons side by side  */}
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
